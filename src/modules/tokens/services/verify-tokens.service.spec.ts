@@ -26,7 +26,7 @@ describe('VerifyTokensService', () => {
   it('should be able to verify a token', async () => {
     const createdToken = await createService.execute({
       uniqueIdentifier: 'uniqueIdentifier',
-      expires_date: addDays(new Date(), 1),
+      expiresDate: addDays(new Date(), 1),
     });
 
     const token = await service.execute(createdToken);
@@ -43,7 +43,7 @@ describe('VerifyTokensService', () => {
   it('should not be able to verify a expires token', async () => {
     const createdToken = await createService.execute({
       uniqueIdentifier: 'uniqueIdentifier',
-      expires_date: subDays(new Date(), 1),
+      expiresDate: subDays(new Date(), 1),
     });
 
     await expect(service.execute(createdToken)).rejects.toThrow(

@@ -12,7 +12,7 @@ export class Token {
   token: string;
 
   @Prop({ required: true })
-  expires_date: Date;
+  expiresDate: Date;
 }
 
 export const TokenSchema = SchemaFactory.createForClass(Token);

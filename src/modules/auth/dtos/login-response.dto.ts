@@ -6,5 +6,8 @@ export class LoginResponseDto {
   token: string;
 
   @ApiProperty()
+  refreshToken: string;
+
+  @ApiProperty()
   user: UserReadDto;
 }

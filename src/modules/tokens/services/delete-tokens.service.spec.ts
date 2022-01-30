@@ -26,7 +26,7 @@ describe('DeleteTokensService', () => {
 
     await createService.execute({
       uniqueIdentifier: 'uniqueIdentifier',
-      expires_date: new Date(),
+      expiresDate: new Date(),
     });
 
     await service.execute('uniqueIdentifier');

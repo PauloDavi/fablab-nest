@@ -21,7 +21,7 @@ export class VerifyTokensServiceImp implements VerifyTokensService {
       throw new BadRequestException('Token not exists');
     }
 
-    const tokenExpires = isBefore(new Date(findToken.expires_date), new Date());
+    const tokenExpires = isBefore(new Date(findToken.expiresDate), new Date());
 
     if (tokenExpires) {
       await this.tokenModel.deleteOne({ token });

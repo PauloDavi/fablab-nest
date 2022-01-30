@@ -7,9 +7,12 @@ import { Body, Inject, Param } from '@nestjs/common';
 
 import { LoginResponseDto } from '../dtos/login-response.dto';
 import { LoginDto } from '../dtos/login.dto';
+import { RefreshTokenRequestDto } from '../dtos/refresh-token-request.dto';
+import { RefreshTokenResponseDto } from '../dtos/refresh-token-response.dto';
 import { RequestResetPasswordDto } from '../dtos/request-reset-password.dto';
 import { VerifyTokenAndResetPasswordDto } from '../dtos/verify-token-and-reset-password.dto';
 import { LoginService } from '../interfaces/services/login.interface';
+import { RefreshTokenService } from '../interfaces/services/refresh-token.interface';
 import { RequestResetPasswordService } from '../interfaces/services/request-reset-password.interface';
 import { VerifyTokenAndResetPasswordService } from '../interfaces/services/verify-token-and-reset-password.interface';
 import { VerifyUserService } from '../interfaces/services/verify-user.interface';
@@ -18,6 +21,8 @@ import { AUTH_TYPES } from '../interfaces/types';
 @ApiController('auth', 'Auth')
 export class AuthController {
   constructor(
+    @Inject(AUTH_TYPES.services.RefreshTokenService)
+    private readonly refreshTokenService: RefreshTokenService,
     @Inject(AUTH_TYPES.services.LoginService)
     private readonly loginService: LoginService,
     @Inject(AUTH_TYPES.services.VerifyUserService)
@@ -27,6 +32,22 @@ export class AuthController {
     @Inject(AUTH_TYPES.services.RequestResetPasswordService)
     private readonly requestResetPasswordService: RequestResetPasswordService,
   ) {}
+
+  @ApiRouteConfig({
+    method: {
+      type: 'post',
+      path: 'refresh-token',
+    },
+    summary: 'Rota de validação e criação de novo token',
+    bearerAuth: false,
+    apiOkResponse: {
+      type: RefreshTokenResponseDto,
+      description: 'Usuário autenticado',
+    },
+  })
+  async createRefreshTokenService(@Body() body: RefreshTokenRequestDto) {
+    return this.refreshTokenService.execute(body);
+  }
 
   @ApiRouteConfig({
     method: {

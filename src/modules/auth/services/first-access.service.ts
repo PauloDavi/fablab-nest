@@ -20,7 +20,7 @@ export class FirstAccessServiceImp implements FirstAccessService {
   async execute({ email }: FirstAccessDto): Promise<void> {
     const token = await this.createTokensService.execute({
       uniqueIdentifier: email,
-      expires_date: addDays(new Date(), 1),
+      expiresDate: addDays(new Date(), 1),
     });
 
     await this.sendFirstAccessEmailService.execute({ email, token });

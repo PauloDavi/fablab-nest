@@ -21,7 +21,7 @@ describe('CreateTokensService', () => {
   it('should be able to create a token', async () => {
     const token = await service.execute({
       uniqueIdentifier: 'uniqueIdentifier',
-      expires_date: new Date(),
+      expiresDate: new Date(),
     });
 
     expect(token.length).toEqual(6);

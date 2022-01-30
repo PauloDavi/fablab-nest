@@ -11,9 +11,15 @@ import { AuthController } from './controllers/auth.controller';
 import { AUTH_TYPES } from './interfaces/types';
 import { FirstAccessServiceImp } from './services/first-access.service';
 import { LoginServiceImp } from './services/login.service';
+import { RefreshTokenServiceImp } from './services/refresh-token.service';
 import { RequestResetPasswordServiceImp } from './services/request-reset-password.service';
 import { VerifyTokenAndResetPasswordServiceImp } from './services/verify-token-and-reset-password.service';
 import { VerifyUserServiceImp } from './services/verify-user.service';
+
+const refreshTokenService = {
+  provide: AUTH_TYPES.services.RefreshTokenService,
+  useClass: RefreshTokenServiceImp,
+};
 
 const loginService = {
   provide: AUTH_TYPES.services.LoginService,
@@ -64,6 +70,7 @@ const requestResetPasswordService = {
     verifyUserService,
     verifyTokenAndResetPasswordService,
     requestResetPasswordService,
+    refreshTokenService,
   ],
   exports: [firstAccessService],
 })

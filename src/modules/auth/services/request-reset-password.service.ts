@@ -22,7 +22,7 @@ export class RequestResetPasswordServiceImp
   async execute({ email }: RequestResetPasswordDto): Promise<void> {
     const token = await this.createTokensService.execute({
       uniqueIdentifier: email,
-      expires_date: addDays(new Date(), 1),
+      expiresDate: addDays(new Date(), 1),
     });
 
     await this.sendResetPasswordEmailService.execute({ email, token });

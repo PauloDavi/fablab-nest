@@ -15,7 +15,7 @@ export class CreateTokensServiceImp implements CreateTokensService {
 
   async execute({
     uniqueIdentifier,
-    expires_date,
+    expiresDate,
   }: CreateTokenDto): Promise<string> {
     const tokens = await this.tokenModel.find();
 
@@ -34,7 +34,7 @@ export class CreateTokensServiceImp implements CreateTokensService {
       {
         uniqueIdentifier,
         token,
-        expires_date,
+        expiresDate,
       },
       { upsert: true },
     );

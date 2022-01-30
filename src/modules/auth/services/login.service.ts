@@ -1,9 +1,12 @@
 import { ModelPaginateAndSoftDelete } from '@common/interfaces/model-paginate-and-soft-delete.interface';
+import { CreateRefreshTokensService } from '@modules/tokens/interfaces/services/create-refresh-token.interface';
+import { TOKENS_TYPES } from '@modules/tokens/interfaces/types';
 import { User, UserDocument } from '@modules/users/schemas/user.schema';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { compare } from 'bcrypt';
+import { addDays } from 'date-fns';
 
 import { LoginResponseDto } from '../dtos/login-response.dto';
 import { LoginDto } from '../dtos/login.dto';
@@ -15,6 +18,8 @@ export class LoginServiceImp implements LoginService {
     @InjectModel(User.name)
     private readonly userModel: ModelPaginateAndSoftDelete<UserDocument>,
     private readonly jwtService: JwtService,
+    @Inject(TOKENS_TYPES.services.CreateRefreshTokensService)
+    private readonly createRefreshTokensService: CreateRefreshTokensService,
   ) {}
 
   async execute({ email, password }: LoginDto): Promise<LoginResponseDto> {
@@ -39,6 +44,11 @@ export class LoginServiceImp implements LoginService {
       throw new UnauthorizedException('Email or password invalid');
     }
 
+    const refreshToken = await this.createRefreshTokensService.execute({
+      userId: user._id,
+      expiresDate: addDays(new Date(), 30),
+    });
+
     const payload = {
       userId: user._id,
       name: user.name,
@@ -50,6 +60,7 @@ export class LoginServiceImp implements LoginService {
 
     return {
       user: userWithoutPassword,
+      refreshToken,
       token: this.jwtService.sign(payload),
     };
   }
