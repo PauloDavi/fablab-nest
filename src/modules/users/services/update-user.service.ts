@@ -23,7 +23,7 @@ export class UpdateUserServiceImp implements UpdateUserService {
       throw new BadRequestException('There are no fields to update');
     }
 
-    const hashPassword = password ? hash(password, 10) : undefined;
+    const hashPassword = password ? await hash(password, 10) : undefined;
 
     const user = await this.userModel.findByIdAndUpdate(
       id,
